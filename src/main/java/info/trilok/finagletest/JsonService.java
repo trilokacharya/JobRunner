@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.twitter.finagle.Service;
 import com.twitter.util.Future;
-import info.trilok.finagletest.Requests.Handler.CommandHandler;
-import info.trilok.finagletest.Requests.Handler.JobCommandHandler;
+import info.trilok.finagletest.Requests.Handler.JobRequestHandler;
+import info.trilok.finagletest.Requests.Handler.RequestHandler;
 import info.trilok.finagletest.Requests.Request;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.*;
@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
  */
 public class JsonService extends Service<HttpRequest, HttpResponse> {
 
-    CommandHandler jobCommandHandler = JobCommandHandler.getInstance();
+    RequestHandler jobRequestHandler = JobRequestHandler.getInstance();
 
     /**
      * HttpResponse creator that takes in a Future<String> message as the content for the body
@@ -71,7 +71,7 @@ public class JsonService extends Service<HttpRequest, HttpResponse> {
         System.out.println("Cmd =" + jsonRequest.command);
 
         // Call the jobCommand's handler and get a response back
-        Future<String> responseString = jobCommandHandler.handleCommand(jsonRequest);
+        Future<String> responseString = jobRequestHandler.handleCommand(jsonRequest);
 
         // Return response asynchronously
         return createResponseFromMsg(request,responseString,HttpResponseStatus.ACCEPTED);

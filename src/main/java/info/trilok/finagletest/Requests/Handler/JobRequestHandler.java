@@ -10,24 +10,24 @@ import java.util.concurrent.Executors;
 /**
  * Created by trilok on 8/24/2014.
  */
-public class JobCommandHandler implements CommandHandler {
+public class JobRequestHandler implements RequestHandler {
 
     private ExecutorService executorService= Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     //Takes a function and wraps it in a Future so that it's called asynchronously
     ExecutorServiceFuturePool futurePool = new ExecutorServiceFuturePool(executorService);
 
-    private static volatile CommandHandler instance;
+    private static volatile RequestHandler instance;
 
-    private JobCommandHandler(){}
+    private JobRequestHandler(){}
 
     /**
      * get singleton instance
      * @return
      */
-    public static synchronized CommandHandler getInstance(){
+    public static synchronized RequestHandler getInstance(){
         if(instance==null){
-            instance=new JobCommandHandler();
+            instance=new JobRequestHandler();
         }
         return instance;
     }

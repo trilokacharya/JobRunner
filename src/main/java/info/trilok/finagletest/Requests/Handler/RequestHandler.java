@@ -6,6 +6,6 @@ import info.trilok.finagletest.Requests.Request;
 /**
  * Created by trilok on 8/24/2014.
  */
-public interface CommandHandler {
+public interface RequestHandler {
     Future<String> handleCommand(Request request);
 }
