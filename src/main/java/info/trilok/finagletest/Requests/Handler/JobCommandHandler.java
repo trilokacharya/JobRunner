@@ -1,15 +1,11 @@
-package info.trilok.finagletest.Jobs;
+package info.trilok.finagletest.Requests.Handler;
 
 
 import com.twitter.util.*;
 import info.trilok.finagletest.Requests.Request;
-import org.jboss.netty.handler.codec.http.HttpResponse;
-import scala.Function1;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 
 /**
  * Created by trilok on 8/24/2014.

@@ -4,20 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.twitter.finagle.Service;
 import com.twitter.util.Future;
-import com.twitter.util.Promise;
-import info.trilok.finagletest.Jobs.CommandHandler;
-import info.trilok.finagletest.Jobs.JobCommandHandler;
+import info.trilok.finagletest.Requests.Handler.CommandHandler;
+import info.trilok.finagletest.Requests.Handler.JobCommandHandler;
 import info.trilok.finagletest.Requests.Request;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.*;
-import scala.Function1;
 import scala.runtime.AbstractFunction1;
 
 import java.nio.charset.Charset;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 
 /**
  * Created by trilok on 8/24/2014.
