@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by trilok on 8/25/2014.
  */
-public class ManagerImpl implements JobManager {
+public class ProcessRunnerManager implements JobManager {
 
     private static volatile JobManager instance;
 
@@ -18,11 +18,11 @@ public class ManagerImpl implements JobManager {
 
     private Map<Integer, Job> currentJobs = new HashMap<Integer, Job>();
 
-    private ManagerImpl(){}
+    private ProcessRunnerManager(){}
 
     public static synchronized JobManager getInstance() {
         if(instance==null){
-            instance=new ManagerImpl();
+            instance=new ProcessRunnerManager();
         }
         return instance;
     }
