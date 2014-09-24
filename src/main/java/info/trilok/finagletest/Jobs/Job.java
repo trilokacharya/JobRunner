@@ -4,19 +4,15 @@ package info.trilok.finagletest.Jobs;
  * Created by trilok on 8/25/2014.
  */
 public abstract class Job {
-    public static enum JOB_STATUS{WAITING, RUNNING, TERMINATED};
+    public static enum JOB_STATUS{WAITING, RUNNING, FINISHED, ERROR};
 
     private Integer id;
     private JOB_STATUS status;
 
-    public Job(Integer id){}
+    public Job(Integer id){this.id=id;}
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public JOB_STATUS getStatus() {
@@ -27,9 +23,10 @@ public abstract class Job {
         this.status = status;
     }
 
+    public abstract String getErrors();
 
+    public abstract String getOutput();
 
-
-
+    public abstract void start();
 
 }

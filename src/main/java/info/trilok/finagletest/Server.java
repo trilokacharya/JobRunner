@@ -5,6 +5,7 @@ import com.twitter.util.*;
 import java.net.*;
 import java.nio.charset.Charset;
 
+import com.twitter.util.TimeoutException;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.util.CharsetUtil.*;
 import org.jboss.netty.handler.codec.http.*;
@@ -16,7 +17,7 @@ import com.twitter.finagle.builder.ServerBuilder;
  */
 public class Server {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TimeoutException {
         System.out.println("Starting Server");
 
         Service restService = new RestService();
