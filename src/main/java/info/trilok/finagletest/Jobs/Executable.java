@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by trilok on 8/25/2014.
  */
-public class PersistentProcessJob extends Job{
+public class Executable extends Job{
     private Process process;
     private final JobCommand command;
 
@@ -24,7 +24,7 @@ public class PersistentProcessJob extends Job{
 
     private final File stdOut,stdErr;
 
-    public PersistentProcessJob(Long id, File stdOut, File stdErr, JobCommand command){
+    public Executable(Long id, File stdOut, File stdErr, JobCommand command){
         super(id);
         this.command=command;
         this.stdOut=stdOut;
