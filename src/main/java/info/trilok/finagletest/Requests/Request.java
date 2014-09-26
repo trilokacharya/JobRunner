@@ -11,7 +11,12 @@ import java.util.List;
  * Created by trilok on 8/23/2014.
  */
 public class Request {
-    public JobCommand.COMMAND command;
+    public static enum REQUEST_TYPE {CREATE, INFO, MANAGE};
 
-    public HashMap<String,String> args ;
+    public REQUEST_TYPE request;
+    public JobCommand details;
+
+    public String toString(){
+        return request.toString()+"\n"+details.toString();
+    }
 }
