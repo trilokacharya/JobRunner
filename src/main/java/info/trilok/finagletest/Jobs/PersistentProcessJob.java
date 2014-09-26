@@ -1,18 +1,20 @@
 package info.trilok.finagletest.Jobs;
 
 import com.google.common.base.Joiner;
+import info.trilok.finagletest.Jobs.Command.JobCommand;
 
 import java.io.*;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by trilok on 8/25/2014.
  */
 public class PersistentProcessJob extends Job{
     private Process process;
-    private final List<String> command;
+    private final JobCommand command;
 
     // Max amount of output and Error data that we would return
     private final int DATA_RETURN_SIZE_THRESHOLD = 500000;// 500 kb
@@ -22,18 +24,26 @@ public class PersistentProcessJob extends Job{
 
     private final File stdOut,stdErr;
 
-    public PersistentProcessJob(Integer id, File stdOut, File stdErr, List<String> command){
+    public PersistentProcessJob(Long id, File stdOut, File stdErr, JobCommand command){
         super(id);
         this.command=command;
         this.stdOut=stdOut;
         this.stdErr=stdErr;
     }
 
+    private String getCommandString(){
+        StringBuilder sb = new StringBuilder();
+        for(Map.Entry<String,String> arg:command.getArgs().entrySet()){
+            sb.append(arg.getKey()+" "+arg.getValue());
+        }
+        return sb.toString();
+    }
+
     /**
      * Starts the specified process
      */
     public void start(){
-        ProcessBuilder builder=new ProcessBuilder(command);
+        ProcessBuilder builder=new ProcessBuilder(getCommandString());
         builder.redirectError(stdErr);
         builder.redirectOutput(stdOut);
         try{
@@ -50,7 +60,7 @@ public class PersistentProcessJob extends Job{
                 } catch (InterruptedException ex) {}
             }
         }catch (IOException ex){
-            System.err.println("IO Exception when trying to run process"+ Joiner.on(" ").join(command));
+            System.err.println("IO Exception when trying to run process"+command);
             this.setStatus(JOB_STATUS.ERROR);
         }
     }

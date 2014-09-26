@@ -10,15 +10,17 @@ import java.util.Date;
 public abstract class Job {
     public static enum JOB_STATUS{WAITING, RUNNING, FINISHED, ERROR};
 
-    private Integer id;
+    private Long id;
     private JOB_STATUS status;
     private Date startTime;
     private Date endTime;
     private JobCommand jobCommand;
 
-    public Job(Integer id){this.id=id;}
+    private JobType type;
 
-    public Integer getId() {
+    public Job(Long id){this.id=id;}
+
+    public Long getId() {
         return id;
     }
 
@@ -39,5 +41,7 @@ public abstract class Job {
     public Date getStartTime(){return startTime;}
     public Date getEndTime(){return endTime;}
     public JobCommand getJobCommand(){return jobCommand;}
+    public JobType getJobType(){return type;}
+
 
 }
