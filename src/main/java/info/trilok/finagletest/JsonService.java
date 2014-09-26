@@ -68,7 +68,7 @@ public class JsonService extends Service<HttpRequest, HttpResponse> {
             return createResponseFromMsg(request,"Error parsing JSON:"+ex.getMessage(), HttpResponseStatus.BAD_REQUEST);
         }
         // Debug message
-        System.out.println("Cmd =" + jsonRequest.command);
+        System.out.println("Cmd =" + jsonRequest.toString());
 
         // Call the jobCommand's handler and get a response back
         Future<String> responseString = jobRequestHandler.handleCommand(jsonRequest);
