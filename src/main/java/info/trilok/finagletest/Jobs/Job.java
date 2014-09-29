@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by trilok on 8/25/2014.
  */
-public abstract class Job {
+public abstract class Job implements Runnable{
     public static enum JOB_STATUS{WAITING, RUNNING, FINISHED, ERROR};
 
     private Long id;
@@ -36,7 +36,8 @@ public abstract class Job {
 
     public abstract String getOutput();
 
-    public abstract void start();
+    @Override
+    public abstract void run();
 
     public abstract boolean tryCancel(); // try to cancel this job
 

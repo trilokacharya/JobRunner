@@ -5,6 +5,7 @@ import info.trilok.finagletest.Jobs.Command.JobCommand;
 import java.io.*;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -70,18 +71,18 @@ public class Executable extends Job{
      * to feed into the Process builder
      * @return
      */
-    private String getCommandString(){
-        StringBuilder sb = new StringBuilder();
+    private List<String> getCommandString(){
+        List<String> cmd = new ArrayList<String>();
         for(Map.Entry<String,String> arg:command.getArgs().entrySet()){
-            sb.append(arg.getKey()+" "+arg.getValue());
+            cmd.add(arg.getKey()+" "+arg.getValue());
         }
-        return sb.toString();
+        return cmd;
     }
 
     /**
      * Starts the specified process
      */
-    public void start(){
+    public void run(){
         ProcessBuilder builder=new ProcessBuilder(getCommandString());
         builder.redirectError(stdErr);
         builder.redirectOutput(stdOut);
