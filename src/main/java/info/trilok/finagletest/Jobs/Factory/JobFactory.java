@@ -1,9 +1,8 @@
-package info.trilok.finagletest.Jobs.jobmanager;
+package info.trilok.finagletest.Jobs.Factory;
 
 import info.trilok.finagletest.Jobs.Command.JobCommand;
+import info.trilok.finagletest.Jobs.Executable;
 import info.trilok.finagletest.Jobs.Job;
-import info.trilok.finagletest.Jobs.PersistentProcessJob;
-import info.trilok.finagletest.Requests.Request;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,7 +23,7 @@ public class JobFactory {
                 createJobWorkingDirectory(jobId.toString());
                 File stdout = createFile("stdout",jobId.toString());
                 File stderr = createFile("stderr",jobId.toString());
-                job = new PersistentProcessJob(jobId,stdout,stderr,command);
+                job = new Executable(jobId,stdout,stderr,command);
             case CASCADING:
                 break;
             default:
