@@ -15,7 +15,7 @@ import java.util.Properties;
  * Created by trilok on 8/25/2014.
  */
 public class JobFactory {
-    Job Create(JobCommand command) throws IOException{
+    public static Job Create(JobCommand command) throws IOException{
         Job job = null;
         switch(command.getCommand()){
             case EXECUTE:
@@ -32,17 +32,17 @@ public class JobFactory {
         return job;
     }
 
-    private String getJobWorkingDirectory(String jobName) throws IOException{
+    private static String getJobWorkingDirectory(String jobName) throws IOException{
         String baseWorkingDir=getWorkingDirectory();
         return baseWorkingDir+"/"+jobName;
     }
 
-    private boolean createJobWorkingDirectory(String jobName) throws IOException{
+    private static boolean createJobWorkingDirectory(String jobName) throws IOException{
         File jobWorkingDirectory = new File(getJobWorkingDirectory(jobName));
         return jobWorkingDirectory.mkdir();
     }
 
-    private File createFile(String fileName, String jobName) throws IOException{
+    private static File createFile(String fileName, String jobName) throws IOException{
         String jobDir=getJobWorkingDirectory(jobName);
         File file = new File(jobDir+"/"+fileName);
         file.createNewFile();
@@ -54,11 +54,11 @@ public class JobFactory {
      * @return
      * @throws IOException
      */
-    private String getWorkingDirectory() throws IOException{
+    private static String getWorkingDirectory() throws IOException{
         Properties prop = new Properties();
         String propFileName = "config.properties";
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+        InputStream inputStream = JobFactory.class.getClassLoader().getResourceAsStream(propFileName);
 
         if(inputStream==null){
             throw new FileNotFoundException("Couldn't find properties file:"+propFileName);
