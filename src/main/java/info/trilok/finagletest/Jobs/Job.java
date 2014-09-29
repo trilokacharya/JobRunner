@@ -38,6 +38,8 @@ public abstract class Job {
 
     public abstract void start();
 
+    public abstract boolean tryCancel(); // try to cancel this job
+
     public Date getStartTime(){return startTime;}
     public Date getEndTime(){return endTime;}
     public JobCommand getJobCommand(){return jobCommand;}

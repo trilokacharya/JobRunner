@@ -1,6 +1,5 @@
 package info.trilok.finagletest.Jobs;
 
-import com.google.common.base.Joiner;
 import info.trilok.finagletest.Jobs.Command.JobCommand;
 
 import java.io.*;
@@ -8,6 +7,7 @@ import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by trilok on 8/25/2014.
@@ -15,6 +15,8 @@ import java.util.Map;
 public class Executable extends Job{
     private Process process;
     private final JobCommand command;
+
+    private volatile boolean shouldBeKilled=false;
 
     // Max amount of output and Error data that we would return
     private final int DATA_RETURN_SIZE_THRESHOLD = 500000;// 500 kb
@@ -31,6 +33,43 @@ public class Executable extends Job{
         this.stdErr=stdErr;
     }
 
+    /**
+     * Terrible (and only) way to figure out if a process is alive as of Java 7.
+     * Java 8 has good support for checking this as a process.isAlive() call
+     * @return
+     */
+    private boolean processIsAlive(){
+        try{
+            process.exitValue(); // if this throws an exception, the process is still running
+            return false;
+        }catch(IllegalThreadStateException ex){
+            return true;
+        }
+
+    }
+
+    /**
+     * Try to cancel a running process and returns false if it is unable to do so.
+     * @return
+     */
+    public boolean tryCancel(){
+        if(processIsAlive()){
+            this.process.destroy();
+        }
+        try {
+            Thread.sleep(1000);
+            if(processIsAlive()){
+                return false;
+            }
+        }catch(InterruptedException ex){}
+        return true;
+    }
+
+    /**
+     * Converts the map of key:argument values to a command string, separated by a space
+     * to feed into the Process builder
+     * @return
+     */
     private String getCommandString(){
         StringBuilder sb = new StringBuilder();
         for(Map.Entry<String,String> arg:command.getArgs().entrySet()){
@@ -49,13 +88,15 @@ public class Executable extends Job{
         try{
             this.process=builder.start();
             this.setStatus(JOB_STATUS.RUNNING);
-            while(process.isAlive()) {
+            while(processIsAlive()) {
                 try {
-                    process.waitFor(); // wait for the job to finish
-                    if(process.exitValue()==0){ // success
-                        setStatus(JOB_STATUS.FINISHED);
-                    }else{ // failed
-                        setStatus(JOB_STATUS.ERROR);
+                    process.waitFor();
+                    if(!processIsAlive()) {
+                        if (process.exitValue() == 0) { // success
+                            setStatus(JOB_STATUS.FINISHED);
+                        } else { // failed
+                            setStatus(JOB_STATUS.ERROR);
+                        }
                     }
                 } catch (InterruptedException ex) {}
             }
