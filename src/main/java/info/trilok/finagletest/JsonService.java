@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
 public class JsonService extends Service<HttpRequest, HttpResponse> {
 
     RequestHandler jobRequestHandler = JobRequestHandler.getInstance();
+    JobService jobService = new JobService();
 
     /**
      * HttpResponse creator that takes in a Future<String> message as the content for the body
@@ -71,10 +72,10 @@ public class JsonService extends Service<HttpRequest, HttpResponse> {
         System.out.println("Cmd =" + jsonRequest.toString());
 
         // Call the jobCommand's handler and get a response back
-        Future<String> responseString = jobRequestHandler.handleCommand(jsonRequest);
+//        Future<String> responseString = jobRequestHandler.handleCommand(jsonRequest);
+        Future<String> responseString =jobService.runCommand(jsonRequest);
 
         // Return response asynchronously
         return createResponseFromMsg(request,responseString,HttpResponseStatus.ACCEPTED);
-
     }
 }
