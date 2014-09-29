@@ -1,7 +1,5 @@
 package info.trilok.finagletest.Jobs.Command;
 
-import scala.collection.mutable.HashEntry;
-
 import java.util.HashMap;
 import java.util.Map;
 

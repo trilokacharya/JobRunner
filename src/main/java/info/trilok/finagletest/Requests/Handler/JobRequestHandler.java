@@ -55,7 +55,7 @@ public class JobRequestHandler implements RequestHandler {
      * @return
      */
     private String syncHandleCommand(Request request){
-       return request.command+" -> Command Received. Will perform.";
+       return request.toString()+" -> Command Received. Will perform.";
     }
 
 }

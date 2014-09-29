@@ -1,6 +1,5 @@
 package info.trilok.finagletest.Requests;
 
-import com.google.gson.annotations.SerializedName;
 import info.trilok.finagletest.Jobs.Command.JobCommand;
 
 import java.util.ArrayList;
