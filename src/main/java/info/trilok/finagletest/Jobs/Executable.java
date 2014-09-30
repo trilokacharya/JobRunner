@@ -1,14 +1,13 @@
 package info.trilok.finagletest.Jobs;
 
+import com.google.common.base.Splitter;
 import info.trilok.finagletest.Jobs.Command.JobCommand;
 
 import java.io.*;
-import java.nio.ByteOrder;
-import java.nio.CharBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by trilok on 8/25/2014.
@@ -73,9 +72,17 @@ public class Executable extends Job{
      */
     private List<String> getCommandString(){
         List<String> cmd = new ArrayList<String>();
-        for(Map.Entry<String,String> arg:command.getArgs().entrySet()){
-            cmd.add(arg.getKey()+" "+arg.getValue());
+        HashMap<String, String> args = command.getArgs();
+        String execCommand = args.get("executable");
+        if (execCommand == null) {
+            throw new IllegalArgumentException("Missing 'cmd' field in the command");
         }
+        cmd.add(execCommand);
+        String arguments = args.get("args");
+        if (arguments == null) {
+            throw new IllegalArgumentException("Missing 'args' filed in the command");
+        }
+        cmd.addAll(Splitter.on(" ").splitToList(arguments));
         return cmd;
     }
 
