@@ -4,15 +4,13 @@ import com.google.common.base.Splitter;
 import info.trilok.finagletest.Jobs.Command.JobCommand;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by trilok on 8/25/2014.
  */
 public class Executable extends Job{
+    private ProcessBuilder builder;
     private Process process;
     private final JobCommand command;
 
@@ -49,6 +47,82 @@ public class Executable extends Job{
     }
 
     /**
+     * Converts the map of key:argument values to a command string, separated by a space
+     * to feed into the Process builder
+     * @return
+     */
+    private List<String> getCommandString() throws Exception{
+        List<String> cmd = new ArrayList<String>();
+        HashMap<String, String> args = command.getArgs();
+        String execCommand = args.get("executable");
+        if (execCommand == null) {
+            throw new Exception("Missing 'executable' field in the command");
+        }
+        cmd.add(execCommand);
+        String arguments = args.get("args");
+        if (arguments == null) {
+            throw new IllegalArgumentException("Missing 'args' filed in the command");
+        }
+        cmd.addAll(Splitter.on(" ").splitToList(arguments));
+        return cmd;
+    }
+
+    /**
+     * Set up this job to run. Performs validation of command format and throws an exception if the required
+     * params aren't present.
+     * @throws Exception
+     */
+    public void setupJob() throws Exception{
+        builder=new ProcessBuilder(getCommandString());
+        builder.redirectError(stdErr);
+        builder.redirectOutput(stdOut);
+    }
+
+    /**
+     * Starts the specified process
+     */
+    public Job call(){
+        try{
+            this.process=builder.start();
+            this.setStatus(JOB_STATUS.RUNNING);
+            this.setStartTime(new Date());
+
+            while(processIsAlive()) {
+                try {
+                    process.waitFor();
+                    if(!processIsAlive()) {
+                        if (process.exitValue() == 0) { // success
+                            setStatus(JOB_STATUS.FINISHED);
+                        } else { // failed
+                            setStatus(JOB_STATUS.ERROR);
+                        }
+                        this.setEndTime(new Date());
+                    }
+                } catch (InterruptedException ex) {}
+            }
+        }catch (IOException ex){
+            System.err.println("IO Exception when trying to run process"+command);
+            this.setStatus(JOB_STATUS.ERROR);
+        }
+        return this;
+    }
+
+    /**
+     * Returns a readable status information about this job, including runtime,
+     * process status
+     * @return
+     */
+    public String getJobInfo(){
+        StringBuilder sb = new StringBuilder();
+        JOB_STATUS status = getStatus();
+        sb.append("This job's status is"+status.toString()+"\n. The job started at:"+getStartTimeStr());
+        if (status==JOB_STATUS.FINISHED || status==JOB_STATUS.ERROR){
+            sb.append("The job ended at:"+getEndTimeStr());
+        }
+        return sb.toString();
+    }
+
+    /**
      * Try to cancel a running process and returns false if it is unable to do so.
      * @return
      */
@@ -65,54 +139,6 @@ public class Executable extends Job{
         return true;
     }
 
-    /**
-     * Converts the map of key:argument values to a command string, separated by a space
-     * to feed into the Process builder
-     * @return
-     */
-    private List<String> getCommandString(){
-        List<String> cmd = new ArrayList<String>();
-        HashMap<String, String> args = command.getArgs();
-        String execCommand = args.get("executable");
-        if (execCommand == null) {
-            throw new IllegalArgumentException("Missing 'cmd' field in the command");
-        }
-        cmd.add(execCommand);
-        String arguments = args.get("args");
-        if (arguments == null) {
-            throw new IllegalArgumentException("Missing 'args' filed in the command");
-        }
-        cmd.addAll(Splitter.on(" ").splitToList(arguments));
-        return cmd;
-    }
-
-    /**
-     * Starts the specified process
-     */
-    public void run(){
-        ProcessBuilder builder=new ProcessBuilder(getCommandString());
-        builder.redirectError(stdErr);
-        builder.redirectOutput(stdOut);
-        try{
-            this.process=builder.start();
-            this.setStatus(JOB_STATUS.RUNNING);
-            while(processIsAlive()) {
-                try {
-                    process.waitFor();
-                    if(!processIsAlive()) {
-                        if (process.exitValue() == 0) { // success
-                            setStatus(JOB_STATUS.FINISHED);
-                        } else { // failed
-                            setStatus(JOB_STATUS.ERROR);
-                        }
-                    }
-                } catch (InterruptedException ex) {}
-            }
-        }catch (IOException ex){
-            System.err.println("IO Exception when trying to run process"+command);
-            this.setStatus(JOB_STATUS.ERROR);
-        }
-    }
 
     public String getErrors(){
         return getFileContent(stdErr);
