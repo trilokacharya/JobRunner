@@ -31,4 +31,8 @@ public final class JobCommand {
         }
        return command.toString()+"\n"+sb.toString();
     }
+
+    public boolean isValid(){
+        return this.command!=null;
+    }
 }

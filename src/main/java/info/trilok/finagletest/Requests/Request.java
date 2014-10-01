@@ -14,6 +14,11 @@ public class Request {
 
     public REQUEST_TYPE request;
     public JobCommand details;
+    public Long jobId;
+
+    public boolean isValid(){
+        return details!=null && details.isValid();
+    }
 
     public String toString(){
         return request.toString()+"\n"+details.toString();
