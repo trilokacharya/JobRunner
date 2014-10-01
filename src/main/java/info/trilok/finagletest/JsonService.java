@@ -1,11 +1,10 @@
 package info.trilok.finagletest;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.twitter.finagle.Service;
 import com.twitter.util.Future;
-import info.trilok.finagletest.Requests.Handler.JobRequestHandler;
-import info.trilok.finagletest.Requests.Handler.RequestHandler;
 import info.trilok.finagletest.Requests.Request;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.*;
@@ -18,7 +17,6 @@ import java.nio.charset.Charset;
  */
 public class JsonService extends Service<HttpRequest, HttpResponse> {
 
-    RequestHandler jobRequestHandler = JobRequestHandler.getInstance();
     JobService jobService = new JobService();
 
     /**
@@ -64,9 +62,12 @@ public class JsonService extends Service<HttpRequest, HttpResponse> {
 
         try { // try to parse the Json
             jsonRequest= new Gson().fromJson(content, Request.class);
-        }catch(JsonSyntaxException ex){
+        }catch(JsonParseException ex) {
             System.err.println(ex.getMessage());
-            return createResponseFromMsg(request,"Error parsing JSON:"+ex.getMessage(), HttpResponseStatus.BAD_REQUEST);
+            return createResponseFromMsg(request, "Error parsing JSON:" + ex.getMessage(), HttpResponseStatus.BAD_REQUEST);
+        }
+        if(jsonRequest==null || !jsonRequest.isValid()){
+            return createResponseFromMsg(request, "Cannot parse JSON Request into a request" , HttpResponseStatus.BAD_REQUEST);
         }
         // Debug message
         System.out.println("Cmd =" + jsonRequest.toString());
