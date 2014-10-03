@@ -54,14 +54,14 @@ public class Executable extends Job{
     private List<String> getCommandString() throws Exception{
         List<String> cmd = new ArrayList<String>();
         HashMap<String, String> args = command.getArgs();
-        String execCommand = args.get("executable");
+        String execCommand = args.get("EXECUTABLE");
         if (execCommand == null) {
-            throw new Exception("Missing 'executable' field in the command");
+            throw new Exception("Missing 'EXECUTABLE' field in the command");
         }
         cmd.add(execCommand);
-        String arguments = args.get("args");
+        String arguments = args.get("ARGS");
         if (arguments == null) {
-            throw new IllegalArgumentException("Missing 'args' filed in the command");
+            throw new IllegalArgumentException("Missing 'ARGS' filed in the command");
         }
         cmd.addAll(Splitter.on(" ").splitToList(arguments));
         return cmd;
@@ -115,7 +115,7 @@ public class Executable extends Job{
     public String getJobInfo(){
         StringBuilder sb = new StringBuilder();
         JOB_STATUS status = getStatus();
-        sb.append("This job's status is"+status.toString()+"\n. The job started at:"+getStartTimeStr());
+        sb.append("This job's status is: "+status.toString()+"\n. The job started at: "+getStartTimeStr());
         if (status==JOB_STATUS.FINISHED || status==JOB_STATUS.ERROR){
             sb.append("The job ended at:"+getEndTimeStr());
         }
