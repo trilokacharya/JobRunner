@@ -4,13 +4,19 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.twitter.finagle.Service;
+import com.twitter.util.Function0;
 import com.twitter.util.Future;
+import com.twitter.util.FutureEventListener;
+import info.trilok.finagletest.Jobs.Response.Response;
 import info.trilok.finagletest.Requests.Request;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.*;
+import scala.Function1;
 import scala.runtime.AbstractFunction1;
+import scala.runtime.BoxedUnit;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 
 /**
  * Created by trilok on 8/24/2014.
@@ -18,6 +24,7 @@ import java.nio.charset.Charset;
 public class JsonService extends Service<HttpRequest, HttpResponse> {
 
     JobService jobService = new JobService();
+    Gson gson= new Gson();
 
     /**
      * HttpResponse creator that takes in a Future<String> message as the content for the body
@@ -61,7 +68,7 @@ public class JsonService extends Service<HttpRequest, HttpResponse> {
         String content= request.getContent().toString(Charset.defaultCharset());
 
         try { // try to parse the Json
-            jsonRequest= new Gson().fromJson(content, Request.class);
+            jsonRequest= gson.fromJson(content, Request.class);
         }catch(JsonParseException ex) {
             System.err.println(ex.getMessage());
             return createResponseFromMsg(request, "Error parsing JSON:" + ex.getMessage(), HttpResponseStatus.BAD_REQUEST);
@@ -74,9 +81,11 @@ public class JsonService extends Service<HttpRequest, HttpResponse> {
 
         // Call the jobCommand's handler and get a response back
 //        Future<String> responseString = jobRequestHandler.handleCommand(jsonRequest);
-        Future<String> responseString =jobService.runCommand(jsonRequest);
+        String responseString =gson.toJson(jobService.runCommand(jsonRequest)).toString();
 
         // Return response asynchronously
         return createResponseFromMsg(request,responseString,HttpResponseStatus.ACCEPTED);
     }
+
 }
+
