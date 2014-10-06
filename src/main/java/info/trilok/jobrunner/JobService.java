@@ -50,7 +50,6 @@ public class JobService {
 //                result= "Job not found:"+request.jobId.toString();
                 response.status= Response.RESPONSE_STATUS.ERROR;
                 response.message="Job not found:"+request.jobId.toString();
-
             }else{
                 response.status= Response.RESPONSE_STATUS.OK;
                 switch(request.details.getCommand()){
@@ -69,6 +68,10 @@ public class JobService {
                     case GET_STDOUT:
                         //result = j.getOutput();
                         response.message= j.getOutput();
+                        break;
+                    case TRY_CANCEL:
+                        boolean success = j.tryCancel();
+                        response.message=Boolean.toString(success);
                         break;
                     default:
                         response.status= Response.RESPONSE_STATUS.ERROR;

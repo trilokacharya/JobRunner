@@ -136,7 +136,14 @@ public class Executable extends Job{
                 return false;
             }
         }catch(InterruptedException ex){}
-        return true;
+        // the thread.sleep may have been interrupted for any reason, and escaped the above logic, so we need to double
+        // check
+        if(processIsAlive()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
 
