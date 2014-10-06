@@ -1,8 +1,8 @@
-package info.trilok.finagletest.Jobs.Factory;
+package info.trilok.jobrunner.Jobs.Factory;
 
-import info.trilok.finagletest.Jobs.Command.JobCommand;
-import info.trilok.finagletest.Jobs.Executable;
-import info.trilok.finagletest.Jobs.Job;
+import info.trilok.jobrunner.Jobs.Command.JobCommand;
+import info.trilok.jobrunner.Jobs.Executable;
+import info.trilok.jobrunner.Jobs.Job;
 
 import java.io.File;
 import java.io.FileNotFoundException;

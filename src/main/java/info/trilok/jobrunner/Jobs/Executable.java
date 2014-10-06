@@ -1,7 +1,7 @@
-package info.trilok.finagletest.Jobs;
+package info.trilok.jobrunner.Jobs;
 
 import com.google.common.base.Splitter;
-import info.trilok.finagletest.Jobs.Command.JobCommand;
+import info.trilok.jobrunner.Jobs.Command.JobCommand;
 
 import java.io.*;
 import java.util.*;

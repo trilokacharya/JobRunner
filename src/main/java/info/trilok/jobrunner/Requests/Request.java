@@ -1,10 +1,6 @@
-package info.trilok.finagletest.Requests;
+package info.trilok.jobrunner.Requests;
 
-import info.trilok.finagletest.Jobs.Command.JobCommand;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import info.trilok.jobrunner.Jobs.Command.JobCommand;
 
 /**
  * Created by trilok on 8/23/2014.

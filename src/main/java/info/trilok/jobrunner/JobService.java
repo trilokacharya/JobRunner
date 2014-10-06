@@ -1,11 +1,10 @@
-package info.trilok.finagletest;
+package info.trilok.jobrunner;
 
 import com.twitter.util.ExecutorServiceFuturePool;
-import com.twitter.util.Future;
-import info.trilok.finagletest.Jobs.Factory.JobFactory;
-import info.trilok.finagletest.Jobs.Job;
-import info.trilok.finagletest.Jobs.Response.Response;
-import info.trilok.finagletest.Requests.Request;
+import info.trilok.jobrunner.Jobs.Factory.JobFactory;
+import info.trilok.jobrunner.Jobs.Job;
+import info.trilok.jobrunner.Jobs.Response.Response;
+import info.trilok.jobrunner.Requests.Request;
 
 import java.io.IOException;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package info.trilok.finagletest.Jobs.Command;
+package info.trilok.jobrunner.Jobs.Command;
 
 import java.util.HashMap;
 import java.util.Map;

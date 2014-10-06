@@ -1,6 +1,6 @@
-package info.trilok.finagletest.Jobs;
+package info.trilok.jobrunner.Jobs;
 
-import info.trilok.finagletest.Jobs.Command.JobCommand;
+import info.trilok.jobrunner.Jobs.Command.JobCommand;
 
 import java.util.Date;
 import java.util.concurrent.Callable;

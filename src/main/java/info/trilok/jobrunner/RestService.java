@@ -1,8 +1,7 @@
-package info.trilok.finagletest;
+package info.trilok.jobrunner;
 
 import com.twitter.finagle.Service;
 import com.twitter.util.Future;
-import info.trilok.finagletest.Requests.Request;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.handler.codec.http.*;
 
@@ -12,7 +11,6 @@ import java.util.HashMap;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.google.gson.*;
 import scala.runtime.AbstractFunction1;
 
 /**

@@ -1,9 +1,8 @@
-package info.trilok.finagletest;
+package info.trilok.jobrunner;
 
-import com.twitter.util.Future;
-import info.trilok.finagletest.Jobs.Command.JobCommand;
-import info.trilok.finagletest.Jobs.Response.Response;
-import info.trilok.finagletest.Requests.Request;
+import info.trilok.jobrunner.Jobs.Command.JobCommand;
+import info.trilok.jobrunner.Jobs.Response.Response;
+import info.trilok.jobrunner.Requests.Request;
 import org.junit.Test;
 
 import java.util.HashMap;

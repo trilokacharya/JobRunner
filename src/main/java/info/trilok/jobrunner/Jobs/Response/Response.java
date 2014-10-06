@@ -1,4 +1,4 @@
-package info.trilok.finagletest.Jobs.Response;
+package info.trilok.jobrunner.Jobs.Response;
 
 /**
  * Created by tacharya on 10/3/2014.
