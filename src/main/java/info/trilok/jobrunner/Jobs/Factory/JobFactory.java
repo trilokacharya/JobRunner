@@ -3,6 +3,7 @@ package info.trilok.jobrunner.Jobs.Factory;
 import info.trilok.jobrunner.Jobs.Command.JobCommand;
 import info.trilok.jobrunner.Jobs.Executable;
 import info.trilok.jobrunner.Jobs.Job;
+import info.trilok.jobrunner.config.Config;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,26 +56,15 @@ public class JobFactory {
      * @throws IOException
      */
     private static String getWorkingDirectory() throws IOException{
-        Properties prop = new Properties();
-        String propFileName = "config.properties";
-
-        InputStream inputStream = JobFactory.class.getClassLoader().getResourceAsStream(propFileName);
-
-        if(inputStream==null){
-            throw new FileNotFoundException("Couldn't find properties file:"+propFileName);
-        }
-
-        try {
-            prop.load(inputStream);
-        }catch (IOException ex){
-            System.err.println("Cannot open properties file:"+propFileName);
+        String workingDir;
+        try{
+            workingDir= Config.getInstance().getProperty("working_dir");
+            if(workingDir==null){
+                System.err.println("Can't find config option: 'working_dir'. Cannot create job");
+            }
+        }catch(IOException ex){
             throw ex;
         }
-        finally{
-            inputStream.close();
-        }
-
-        String workingDir= prop.getProperty("working_dir");
         return workingDir;
     }
 
