@@ -6,5 +6,5 @@
 {"request":"INFO","details":{"command":"GET_RUN_INFO","args":{}},"jobId":"1412359704237"}
 
 // Get the std out from the given job
-{"request":"INFO","details":{"command":"GET_STD_OUT","args":{}},"jobId":"1412182382207"}
+{"request":"INFO","details":{"command":"GET_STDOUT","args":{}},"jobId":"1412182382207"}
 
